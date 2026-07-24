@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Diabetes Prediction Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+</head>
+
+<script>
+function calculateBMI() {
+
+    let height = parseFloat(document.getElementById("height").value);
+    let weight = parseFloat(document.getElementById("weight").value);
+
+    if (!height || !weight || height <= 0 || weight <= 0) {
+        alert("Please enter valid height and weight.");
+        return;
+    }
+
+    let heightMeter = height / 100;
+    let bmi = weight / (heightMeter * heightMeter);
+
+    let status = "";
+
+    if (bmi < 18.5) {
+        status = "Underweight";
+    } else if (bmi < 25) {
+        status = "Normal";
+    } else if (bmi < 30) {
+        status = "Overweight";
+    } else {
+        status = "Obese";
+    }
+
+    document.getElementById("bmiValue").innerHTML = bmi.toFixed(2);
+    document.getElementById("bmiStatus").innerHTML = status;
+    document.getElementById("bmiResult").style.display = "block";
+}
+</script>
+
+
+
+<body>
+
+<div class="wrapper">
+
+<!-- ================= SIDEBAR ================= -->
+
+<nav class="sidebar">
+
+<div class="logo">
+<i class="fa-solid fa-user-doctor"></i>
+<!-- <img src="../static/stethoscope.png"> -->
+
+<h3>DiaPredict AI</h3>
+
+</div>
+
+<ul>
+
+<li class="active">
+<i class="fa-solid fa-house"></i>
+<span>Dashboard</span>
+</li>
+
+<a href="#predict">
+<li class="active">
+<i class="fa-solid fa-stethoscope"></i>
+<span>Prediction</span>
+</li>
+</a>
+
+<!-- <li>
+<i class="fa-solid fa-chart-line"></i>
+<span>Reports</span>
+</li>
+
+<li>
+<i class="fa-solid fa-clock-rotate-left"></i>
+<span>History</span>
+</li>
+
+<li>
+<i class="fa-solid fa-heart-pulse"></i>
+<span>Health Tips</span>
+</li>
+
+<li>
+<i class="fa-solid fa-gear"></i>
+<span>Settings</span>
+</li> -->
+
+</ul>
+
+<div class="bottom">
+
+<img src="../static/docter.webp">
+
+<h5>AI Healthcare</h5>
+
+<p>Predict diabetes risk using Machine Learning.</p>
+
+</div>
+
+</nav>
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+<!-- TOP BAR -->
+
+<header>
+
+<div>
+
+<h2>Diabetes Prediction Dashboard</h2>
+
+<p>AI Powered Healthcare System</p>
+
+</div>
+
+<div class="profile">
+
+<i class="fa-solid fa-bell"></i>
+
+<img src="../static/docter.webp">
+
+</div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-text">
+
+<h1>
+
+Predict Diabetes Early with Artificial Intelligence
+
+</h1>
+
+<p>
+
+Enter the patient's medical information and our trained
+machine learning model will estimate the diabetes risk.
+
+</p>
+
+<a href="#predict">
+
+<button>
+
+<i class="fa-solid fa-arrow-down"></i>
+
+Start Prediction
+
+</button>
+
+</a>
+
+</div>
+
+<div class="hero-image">
+
+<img src="../static/diabetes.png">
+
+</div>
+
+</section>
+
+<!-- ================= CARDS ================= -->
+
+<div class="cards">
+
+<div class="card-box">
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+<h2>86%</h2>
+
+<p>Model Accuracy</p>
+
+</div>
+
+<div class="card-box">
+
+<i class="fa-solid fa-user-doctor"></i>
+
+<h2>24/7</h2>
+
+<p>AI Assistance</p>
+
+</div>
+
+<div class="card-box">
+
+<i class="fa-solid fa-laptop-medical"></i>
+
+<h2>1000+</h2>
+
+<p>Predictions</p>
+
+</div>
+
+<div class="card-box">
+
+<i class="fa-solid fa-shield-heart"></i>
+
+<h2>Secure</h2>
+
+<p>Patient Data</p>
+
+</div>
+
+</div>
+
+<!-- ================= PREDICTION FORM ================= -->
+
+<section id="predict" class="prediction-section">
+
+<div class="prediction-card">
+
+<h3>
+
+<i class="fa-solid fa-stethoscope"></i>
+
+Patient Information
+
+</h3>
+
+<form action="/predict" method="POST">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label>Age</label>
+
+<input
+type="number"
+name="Age"
+class="form-control"
+placeholder="Enter Age"
+required>
+
+</div>
+
+<div class="col-md-6">
+
+<label>BMI</label>
+
+<input
+type="number"
+step="0.1"
+name="BMI"
+class="form-control"
+placeholder="Enter BMI"
+required>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label>Gender</label>
+
+<select
+name="Gender"
+class="form-select">
+
+<option value="">Select</option>
+
+<option value="1">Male</option>
+
+<option value="0">Female</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6">
+
+<label>Physical Activity</label>
+
+<select
+name="Physical_Activity"
+class="form-select">
+
+<option value="">Select</option>
+
+<option value="1">Yes</option>
+
+<option value="0">No</option>
+
+</select>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <label>Smoked</label>
+
+        <select name="Smoked" class="form-select">
+
+            <option value="">Select</option>
+
+            <option value="1">Yes</option>
+
+            <option value="0">No</option>
+
+        </select>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <label>High Blood Pressure</label>
+
+        <select name="HighBP" class="form-select">
+
+            <option value="">Select</option>
+
+            <option value="1">Yes</option>
+
+            <option value="0">No</option>
+
+        </select>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <label>General Health</label>
+
+        <select name="GeneralHealth" class="form-select">
+
+            <option value="">Select Health Status</option>
+
+            <option value="Poor">Poor</option>
+
+            <option value="Fair">Fair</option>
+
+            <option value="Good">Good</option>
+
+            <option value="VeryGood">Very Good</option>
+
+        </select>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="text-center">
+
+<button class="predict-btn">
+
+<i class="fa-solid fa-brain"></i>
+
+Predict Diabetes
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- ================= RIGHT PANEL ================= -->
+
+<div class="info-panel">
+
+<div class="info-card">
+
+<h4>
+
+<!-- <i class="fa-solid fa-heart-circle-check"></i> -->
+
+📏 BMI Calculator
+<!-- Healthy Lifestyle -->
+
+</h4>
+
+
+<div class="input-group">
+        <label>Height (cm)</label>
+        <input type="number" id="height" placeholder="Enter height in cm">
+    </div>
+
+    <div class="input-group">
+        <label>Weight (kg)</label>
+        <input type="number" id="weight" placeholder="Enter weight in kg">
+    </div>
+
+    <button type="button" onclick="calculateBMI()" class="btn">
+        Calculate BMI
+    </button>
+
+    <div id="bmiResult" class="result-box" style="display:none;">
+        <h3>Your BMI: <span id="bmiValue"></span></h3>
+        <p>Status: <span id="bmiStatus"></span></p>
+    </div>
+
+
+
+
+<!-- <ul>
+
+<li>🥗 Eat a balanced diet.</li>
+
+<li>🚶 Exercise at least 30 minutes daily.</li>
+
+<li>💧 Drink enough water.</li>
+
+<li>😴 Sleep 7–8 hours.</li>
+
+<li>🚭 Avoid smoking.</li>
+
+<li>🩺 Get regular health checkups.</li>
+
+</ul> -->
+
+</div>
+
+<div class="info-card">
+
+<h4>
+
+<i class="fa-solid fa-weight-scale"></i>
+
+BMI Categories
+
+</h4>
+
+<table class="table">
+
+<tr>
+
+<th>BMI</th>
+
+<th>Status</th>
+
+</tr>
+
+<tr>
+
+<td><18.5</td>
+
+<td>Underweight</td>
+
+</tr>
+
+<tr>
+
+<td>18.5–24.9</td>
+
+<td>Normal</td>
+
+</tr>
+
+<tr>
+
+<td>25–29.9</td>
+
+<td>Overweight</td>
+
+</tr>
+
+<tr>
+
+<td>30+</td>
+
+<td>Obese</td>
+
+</tr>
+
+</table>
+
+</div>
+
+<div class="info-card">
+
+<h4>
+
+<i class="fa-solid fa-heart-circle-check"></i>
+
+<!-- About AI Model -->
+ Healthy Lifestyle
+
+</h4>
+
+<p>
+
+<li>🥗 Eat a balanced diet.</li>
+
+<li>🚶 Exercise at least 30 minutes daily.</li>
+
+<li>💧 Drink enough water.</li>
+
+<li>😴 Sleep 7–8 hours.</li>
+
+<li>🚭 Avoid smoking.</li>
+
+<li>🩺 Get regular health checkups.</li>
+
+</ul>
+
+<!-- This Diabetes Prediction System is powered by Machine
+Learning using Logistic Regression. It analyzes patient
+health parameters to estimate diabetes risk and assist
+in early screening. -->
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+<p>
+
+© 2026 Diabetes Prediction System |
+Developed using Flask, Machine Learning & Bootstrap
+
+</p>
+
+</footer>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

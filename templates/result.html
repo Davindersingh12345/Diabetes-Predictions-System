@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Prediction Result</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+<div class="text-center mb-5">
+
+<h1 class="text-primary">
+
+<i class="fa-solid fa-heart-pulse"></i>
+
+Diabetes Prediction Analytics
+
+</h1>
+
+<p class="text-muted">
+
+Artificial Intelligence Based Healthcare System
+
+</p>
+
+</div>
+
+<!-- Prediction Card -->
+
+<div class="card shadow-lg border-0 mb-4">
+
+<div class="card-body text-center">
+
+{% if prediction == "Diabetic" %}
+
+<h2 class="text-danger">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+High Risk of Diabetes
+
+</h2>
+
+<p class="lead">
+
+Our AI model predicts that you may be diabetic.
+
+</p>
+
+{% else %}
+
+<h2 class="text-success">
+
+<i class="fa-solid fa-circle-check"></i>
+
+Low Risk of Diabetes
+
+</h2>
+
+<p class="lead">
+
+Our AI model predicts that you are likely non-diabetic.
+
+</p>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<!-- Analytics Cards -->
+
+<div class="row g-4">
+
+<div class="col-md-3">
+
+<div class="card shadow text-center">
+
+<div class="card-body">
+
+<h5>
+
+<i class="fa-solid fa-chart-line"></i>
+
+Risk Score
+
+</h5>
+
+<h2>
+
+{{ probability }}%
+
+</h2>
+
+<div class="progress mt-3">
+
+<div class="progress-bar bg-danger"role="progressbar"style="width: {{ probability|default(0) }}%;">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="card shadow text-center">
+
+<div class="card-body">
+
+<h5>
+
+<i class="fa-solid fa-weight-scale"></i>
+
+BMI
+
+</h5>
+
+<h2>
+
+{{ bmi }}
+
+</h2>
+
+<p>
+
+{{ bmi_category }}
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="card shadow text-center">
+
+<div class="card-body">
+
+<h5>
+
+<i class="fa-solid fa-user"></i>
+
+Age
+
+</h5>
+
+<h2>
+
+{{ age }}
+
+</h2>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="card shadow text-center">
+
+<div class="card-body">
+
+<h5>
+
+<i class="fa-solid fa-heart-circle-check"></i>
+
+Status
+
+</h5>
+
+{% if prediction=="Diabetic" %}
+
+<span class="badge bg-danger fs-6">
+
+High Risk
+
+</span>
+
+{% else %}
+
+<span class="badge bg-success fs-6">
+
+Healthy
+
+</span>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Chart Section -->
+
+<div class="card shadow-lg mt-5">
+
+<div class="card-body">
+
+<h3 class="text-center mb-4">
+
+Prediction Analytics
+
+</h3>
+
+<div style="height:350px; width:350px; margin:auto;">
+
+<canvas id="riskChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= HEALTH RECOMMENDATIONS ================= -->
+
+<div class="card shadow-lg mt-5">
+
+    <div class="card-body">
+
+        <h3 class="mb-4 text-primary">
+
+            <i class="fa-solid fa-notes-medical"></i>
+
+            Health Recommendations
+
+        </h3>
+
+        {% if prediction=="Diabetic" %}
+
+        <div class="alert alert-danger">
+
+            <h5>⚠ High Risk Detected</h5>
+
+            <ul class="mt-3">
+
+                <li>Consult a physician immediately.</li>
+
+                <li>Monitor your blood sugar regularly.</li>
+
+                <li>Avoid sugary drinks and processed foods.</li>
+
+                <li>Exercise at least 30 minutes daily.</li>
+
+                <li>Maintain a healthy BMI.</li>
+
+                <li>Drink plenty of water.</li>
+
+                <li>Sleep 7–8 hours every day.</li>
+
+            </ul>
+
+        </div>
+
+        {% else %}
+
+        <div class="alert alert-success">
+
+            <h5>✅ Healthy Lifestyle</h5>
+
+            <ul class="mt-3">
+
+                <li>Continue regular exercise.</li>
+
+                <li>Eat a balanced diet.</li>
+
+                <li>Maintain your BMI.</li>
+
+                <li>Drink sufficient water.</li>
+
+                <li>Avoid smoking.</li>
+
+                <li>Schedule regular health checkups.</li>
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- ================= PATIENT SUMMARY ================= -->
+
+<div class="card shadow-lg mt-5">
+
+    <div class="card-body">
+
+        <h3 class="text-primary mb-4">
+
+            <i class="fa-solid fa-file-medical"></i>
+
+            Patient Summary
+
+        </h3>
+
+        <table class="table table-bordered">
+
+            <tr>
+
+                <th>Age</th>
+
+                <td>{{ age }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>BMI</th>
+
+                <td>{{ bmi }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>BMI Category</th>
+
+                <td>{{ bmi_category }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Prediction</th>
+
+                <td>{{ prediction }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Risk Score</th>
+
+                <td>{{ probability }}%</td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ================= PREDICT AGAIN ================= -->
+
+<div class="text-center mt-5">
+
+    <a href="/" class="btn btn-primary btn-lg">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Predict Again
+
+    </a>
+
+</div>
+
+</div>
+
+<!-- ================= CHART.JS ================= -->
+
+<script>
+
+const probability = Number("{{ probability | default(0) }}");
+
+const healthy = 100 - probability;
+
+const ctx = document.getElementById("riskChart").getContext("2d");
+
+new Chart(ctx, {
+
+    type: "doughnut",
+
+    data: {
+
+        labels: [
+
+            "Diabetes Risk",
+
+            "Healthy"
+
+        ],
+
+        datasets: [{
+
+            data: [
+
+                probability,
+
+                healthy
+
+            ],
+
+            backgroundColor: [
+
+                "#dc3545",
+
+                "#28a745"
+
+            ],
+
+            hoverOffset: 8,
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        cutout: "65%",
+
+        plugins: {
+
+            legend: {
+
+                position: "bottom"
+
+            },
+
+            tooltip: {
+
+                callbacks: {
+
+                    label: function(context){
+
+                        return context.label + " : " + context.raw + "%";
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>
